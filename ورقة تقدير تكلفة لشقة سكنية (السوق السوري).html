@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة تكلفة تشطيب شقة سكنية - السوق السوري (نسخة معتمدة)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 p-3 md:p-8 min-h-screen">
+
+    <div class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- Header -->
+        <header class="bg-slate-900 text-white p-6 rounded-2xl shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border border-slate-800">
+            <div class="flex flex-col md:flex-row items-start md:items-center gap-4">
+                <!-- AM Tender Logo & Author Badge -->
+                <div class="flex items-center gap-3 bg-slate-800/80 p-2.5 px-4 rounded-xl border border-slate-700/80 shadow-inner">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-amber-600 via-amber-400 to-yellow-300 flex items-center justify-center shadow-lg text-slate-950 font-black text-xl tracking-tighter border border-amber-300/40">
+                        AM
+                    </div>
+                    <div>
+                        <div class="text-sm font-black tracking-wider text-amber-400 uppercase flex items-center gap-1.5">
+                            AM TENDER
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse"></span>
+                        </div>
+                        <div class="text-xs text-slate-200 font-bold mt-0.5">
+                            <span class="text-slate-400 font-normal">إعداد:</span> 
+                            <span class="text-emerald-400 font-extrabold">عبدالله منيزل</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="bg-emerald-500/20 text-emerald-400 text-xs px-2.5 py-0.5 rounded-full font-bold border border-emerald-500/30">نسخة محسنة + BOQ كامل</span>
+                        <span class="bg-blue-500/20 text-blue-400 text-xs px-2.5 py-0.5 rounded-full font-bold border border-blue-500/30">جدول كميات متكامل</span>
+                    </div>
+                    <h1 class="text-xl md:text-2xl font-extrabold text-slate-50">ورقة تقدير تكلفة وتفنيش شقة سكنية (السوق السوري)</h1>
+                    <p class="text-slate-400 text-xs mt-0.5">حساب كميات هندسي + بنود الكهروميكانيك (MEP) والإكساء والتأسيس كاملاً</p>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 text-right min-w-[170px] flex-1 md:flex-initial">
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">سعر صرف الدولار (ل.س)</label>
+                    <input type="number" id="exchangeRate" value="130" step="1" class="bg-slate-900 text-emerald-400 font-bold text-base w-full rounded border border-slate-700 px-2 py-0.5 focus:outline-none focus:border-emerald-500" oninput="calculateAll()">
+                </div>
+                <button onclick="window.print()" class="no-print bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-4 py-3 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                    طباعة / حفظ PDF
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Left Column: Inputs (4 cols) -->
+            <div class="lg:col-span-4 bg-white p-5 rounded-2xl shadow-sm border border-slate-200 space-y-5">
+                
+                <!-- Author & Expert Profile Card -->
+                <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-4 rounded-xl border border-slate-700 shadow-md space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-lg bg-gradient-to-tr from-amber-500 via-amber-400 to-yellow-300 text-slate-950 font-black flex items-center justify-center text-lg shadow-sm border border-amber-300/40 shrink-0">
+                            AM
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-extrabold text-amber-400">عبدالله منيزل</h3>
+                            <p class="text-[11px] text-emerald-400 font-semibold">استشاري تكلفة وإعداد مناقصات | AM Tender</p>
+                        </div>
+                    </div>
+                    
+                    <p class="text-[11px] text-slate-300 leading-relaxed pt-2 border-t border-slate-700/70">
+                        متخصص في إعداد دراسات التكلفة التفصيلية، وجداول الكميات (BOQ)، والعقود، وحصر وتقدير كميات الأعمال المدنية والإنشائية والمعمارية والكهروميكانيكية (MEP)، ودراسة وتحليل أسعار مواد البناء والعمالة، وفق المعايير الهندسية ومبادئ الهندسة القيمية (Value Engineering).
+                    </p>
+
+                    <div class="flex flex-wrap gap-1.5 text-[10px]">
+                        <span class="bg-slate-800/90 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-md font-medium">حساب كميات (QS)</span>
+                        <span class="bg-slate-800/90 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-md font-medium">إعداد وتسعير مناقصات</span>
+                        <span class="bg-slate-800/90 text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded-md font-medium">هندسة قيمية (VE)</span>
+                    </div>
+
+                    <!-- Social Media Links Section -->
+                    <div class="pt-2.5 border-t border-slate-700/80 space-y-2">
+                        <span class="text-[11px] text-slate-400 font-bold block">تواصل معي عبر وسائل التواصل:</span>
+                        <div class="grid grid-cols-2 gap-1.5">
+                            <!-- Facebook Button -->
+                            <a href="https://www.facebook.com/profile.php?id=61583708216106&sk=about" target="_blank" rel="noopener noreferrer" title="Facebook Profile" class="flex items-center justify-center gap-1.5 bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white border border-blue-500/40 py-1 px-2 rounded-lg text-[10px] transition font-bold shadow-sm">
+                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                                <span>فيسبوك</span>
+                            </a>
+                            <!-- LinkedIn Button -->
+                            <a href="https://www.linkedin.com/in/abdullah-minezil-1718b8124?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile" class="flex items-center justify-center gap-1.5 bg-sky-600/20 hover:bg-sky-600 text-sky-300 hover:text-white border border-sky-500/40 py-1 px-2 rounded-lg text-[10px] transition font-bold shadow-sm">
+                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.239-2.762-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                                <span>لينكد إن</span>
+                            </a>
+                            <!-- Instagram Button -->
+                            <a href="https://www.instagram.com/am.tender?stkn=MTRybjk2OHkwc2puYw==" target="_blank" rel="noopener noreferrer" title="Instagram Profile" class="flex items-center justify-center gap-1.5 bg-pink-600/20 hover:bg-pink-600 text-pink-300 hover:text-white border border-pink-500/40 py-1 px-2 rounded-lg text-[10px] transition font-bold shadow-sm">
+                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                                <span>إنستغرام</span>
+                            </a>
+                            <!-- TikTok Button -->
+                            <a href="http://tiktok.com/@abdullaham1111" target="_blank" rel="noopener noreferrer" title="TikTok Profile" class="flex items-center justify-center gap-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 hover:text-white border border-slate-500/40 py-1 px-2 rounded-lg text-[10px] transition font-bold shadow-sm">
+                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.29-2.61.74-5.26 2.72-6.92 1.22-1.02 2.8-1.57 4.38-1.59.36-.01.73.02 1.09.08v3.98c-.42-.09-.86-.12-1.29-.08-1.02.08-2.01.62-2.58 1.46-.66.94-.78 2.19-.38 3.24.38 1.02 1.33 1.78 2.41 1.92 1.09.15 2.2-.28 2.87-1.13.52-.66.75-1.5.73-2.33.02-5.38.01-10.76.01-16.14z"/></svg>
+                                <span>تيك توك</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-b pb-3 flex justify-between items-center">
+                    <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                        مدخلات ومواصفات الشقة
+                    </h2>
+                    <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-medium">معايير هندسية</span>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">المساحة الإجمالية للشقة (م²)</label>
+                        <input type="number" id="totalArea" value="155" min="30" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none" oninput="calculateAll()">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">عدد الغرف</label>
+                            <input type="number" id="numRooms" value="2" min="1" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none" oninput="calculateAll()">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">عدد الحمامات</label>
+                            <input type="number" id="numBaths" value="1" min="1" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none" oninput="calculateAll()">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">عدد الشرفات (البلكون)</label>
+                            <input type="number" id="numBalconies" value="1" min="0" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none" oninput="calculateAll()">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">عدد النوافذ الشامل</label>
+                            <input type="number" id="numWindows" value="4" min="1" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none" oninput="calculateAll()">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">عدد الأبواب الداخلية</label>
+                            <input type="number" id="numDoors" value="4" min="1" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none" oninput="calculateAll()">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">ارتفاع السقف (متر)</label>
+                            <input type="number" id="ceilingHeight" value="3.0" step="0.1" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none" oninput="calculateAll()">
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t">
+                        <label class="block text-xs font-bold text-slate-700 mb-1">نسبة الاحتياطي والطوارئ (Contingency)</label>
+                        <select id="contingencyRate" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none" onchange="calculateAll()">
+                            <option value="0.15" selected>15% (موصى به - اعتيادي)</option>
+                            <option value="0.20">20% (تحوّط من تقلب الأسعار)</option>
+                            <option value="0.10">10% (حد أدنى)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Dimension Reference -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs space-y-1.5 text-slate-600">
+                    <p class="font-bold text-slate-800 border-b pb-1">الأبعاد المعيارية المحسوبة للمساحات:</p>
+                    <div class="grid grid-cols-2 gap-x-2 gap-y-1 text-[11px]">
+                        <div>• الصالة: 6.0 × 5.0 م (30 م²)</div>
+                        <div>• الغرفة: 5.0 × 5.0 م (25 م²)</div>
+                        <div>• المطبخ: 4.0 × 4.0 م (16 م²)</div>
+                        <div>• الحمام: 2.5 × 2.0 م (5 م²)</div>
+                        <div>• الممر: 6.0 × 1.5 م (9 م²)</div>
+                        <div>• البلكونة: 6.0 × 1.5 م (9 م²)</div>
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-2">* مقاس الشباك المعياري: 2.5 × 1.5 م (3.75 م²). باب الغرفة: 1.0 × 2.2 م.</p>
+                </div>
+            </div>
+
+            <!-- Right Column: Results & Tables (8 cols) -->
+            <div class="lg:col-span-8 space-y-6">
+                
+                <!-- KPI Summary Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                        <span class="text-xs text-slate-500 font-medium block mb-1">التكلفة الإجمالية التقديرية</span>
+                        <span id="grandTotalUSD" class="text-2xl font-extrabold text-slate-900">$0</span>
+                        <span id="grandTotalSYP" class="block text-xs font-semibold text-emerald-600 mt-1">0 ل.س</span>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                        <span class="text-xs text-slate-500 font-medium block mb-1">تكلفة المتر المربع الصافي</span>
+                        <span id="costPerM2USD" class="text-2xl font-extrabold text-blue-600">$0 / م²</span>
+                        <span class="block text-xs text-slate-400 mt-1">شاملة المواد والأجور بالكامل</span>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                        <span class="text-xs text-slate-500 font-medium block mb-1">احتياطي الطوارئ (Contingency)</span>
+                        <span id="contingencyUSD" class="text-2xl font-extrabold text-amber-600">$0</span>
+                        <span id="contingencyPercentText" class="block text-xs text-amber-600/80 font-medium mt-1">محتسبة ضمن الإجمالي</span>
+                    </div>
+                </div>
+
+                <!-- Quantities Breakdown Table -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-4 border-b bg-slate-50 flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm md:text-base">1. جدول التفكيك المساحي وحساب الكميات (BOQ Breakdown)</h3>
+                            <p class="text-xs text-slate-500">حساب مساحات الأسقف والجدران الصافية والأرضيات تلقائياً وفق مقاساتك</p>
+                        </div>
+                        <span class="text-xs bg-blue-100 text-blue-800 font-bold px-2.5 py-1 rounded-full">معادلات هندسية</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right text-xs">
+                            <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                                <tr>
+                                    <th class="p-3">الفضاء / المنطقة</th>
+                                    <th class="p-3">الأرضيات (م²)</th>
+                                    <th class="p-3">الجدران الإجمالية (م²)</th>
+                                    <th class="p-3">الأسقف (م²)</th>
+                                    <th class="p-3">النعاليات / Skirting (م.ط)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="quantitiesTableBody" class="divide-y divide-slate-100 text-slate-600">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Financial BOQ Table -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-4 border-b bg-slate-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm md:text-base">2. جدول الكلف وتفصيل البنود الإجمالية (Financial BOQ Table)</h3>
+                            <p class="text-xs text-slate-500">تشمل أعمال اللياسة، الدهان، العزل، السيراميك، الكهروميكانيك (MEP)، الألمنيوم والخشب (يمكنك تعديل أي سعر فردي)</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="resetRates()" class="text-xs bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1 shadow-sm">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                إعادة الأسعار الافتراضية
+                            </button>
+                            <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-full">أسعار مرنة قابلة للتعديل</span>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right text-xs">
+                            <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                                <tr>
+                                    <th class="p-3">رقم البند</th>
+                                    <th class="p-3">توصيف العمل / البند</th>
+                                    <th class="p-3">الكمية (معادلات)</th>
+                                    <th class="p-3">الوحدة</th>
+                                    <th class="p-3">السعر الفردي ($) <span class="text-[10px] text-amber-600 font-normal">(قابل للتعديل)</span></th>
+                                    <th class="p-3">التكلفة الإجمالية ($)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="costTableBody" class="divide-y divide-slate-100">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Footer / Signature Branding -->
+        <footer class="mt-8 border-t border-slate-200 pt-4 pb-2 flex flex-col md:flex-row justify-between items-center text-xs text-slate-500 gap-3">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded bg-amber-500 text-slate-950 font-black flex items-center justify-center text-[10px]">AM</div>
+                <span class="font-bold text-slate-700">AM Tender</span>
+                <span>— جميع الحقوق محفوظة لتقدير تكاليف الإكساء</span>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <div class="font-semibold text-slate-600 bg-white px-3 py-1 rounded-full border border-slate-200 shadow-sm">
+                    إعداد: <span class="text-blue-700 font-extrabold">عبدالله منيزل</span>
+                </div>
+                
+                <!-- Footer Social Links -->
+                <div class="flex items-center gap-2.5">
+                    <a href="https://www.facebook.com/profile.php?id=61583708216106&sk=about" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-blue-600 transition" title="صفحة الفيسبوك">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/abdullah-minezil-1718b8124?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-sky-600 transition" title="صفحة لينكد إن">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.239-2.762-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    </a>
+                    <a href="https://www.instagram.com/am.tender?stkn=MTRybjk2OHkwc2puYw==" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-pink-600 transition" title="حساب إنستغرام">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <a href="http://tiktok.com/@abdullaham1111" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-slate-900 transition" title="حساب تيك توك">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.29-2.61.74-5.26 2.72-6.92 1.22-1.02 2.8-1.57 4.38-1.59.36-.01.73.02 1.09.08v3.98c-.42-.09-.86-.12-1.29-.08-1.02.08-2.01.62-2.58 1.46-.66.94-.78 2.19-.38 3.24.38 1.02 1.33 1.78 2.41 1.92 1.09.15 2.2-.28 2.87-1.13.52-.66.75-1.5.73-2.33.02-5.38.01-10.76.01-16.14z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        // Default market benchmark rates in USD (Items 1 to 16)
+        const defaultRates = {
+            '1': 8.0,   // اللياسة للجدران
+            '2': 10.0,  // رش طينة الأسقف
+            '3': 10.0,  // العزل المائي والحراري
+            '4': 8.0,   // دهان الجدران
+            '5': 8.0,   // دهان الأسقف
+            '6': 12.0,  // أسقف مستعارة (حمامات ومطابخ فقط)
+            '7': 10.0,  // بلاط الأرضيات
+            '8': 10.0,  // سيراميك الجدران
+            '9': 4.0,   // النعاليات
+            '10': 10.0, // العتبات والرخام
+            '11': 250.0,// الأبواب
+            '12': 150.0,// الألمنيوم والنوافذ
+            '13': 10.0, // MEP - الكهرباء
+            '14': 10.0, // MEP - السباكة
+            '15': 200.0,// أطقم الحمامات
+            '16': 1080.0// تجهيزات المطبخ
+        };
+
+        // User modified rates store
+        let customRates = { ...defaultRates };
+
+        function updateRate(id, newRate) {
+            const val = parseFloat(newRate);
+            if (!isNaN(val) && val >= 0) {
+                customRates[id] = val;
+                calculateAll();
+            }
+        }
+
+        function resetRates() {
+            customRates = { ...defaultRates };
+            calculateAll();
+        }
+
+        function calculateAll() {
+            // Fetch inputs with fallback defaults
+            const totalAreaInput = parseFloat(document.getElementById('totalArea').value) || 0;
+            const numRooms = parseInt(document.getElementById('numRooms').value) || 0;
+            const numBaths = parseInt(document.getElementById('numBaths').value) || 0;
+            const numBalconies = parseInt(document.getElementById('numBalconies').value) || 0;
+            const numWindows = parseInt(document.getElementById('numWindows').value) || 0;
+            const numDoors = parseInt(document.getElementById('numDoors').value) || 0;
+            const height = parseFloat(document.getElementById('ceilingHeight').value) || 3.0;
+            const contingencyRate = parseFloat(document.getElementById('contingencyRate').value) || 0.15;
+            const exchangeRate = parseFloat(document.getElementById('exchangeRate').value) || 130;
+
+            // Standard dimensions per room type (m)
+            const living = { w: 6, l: 5, area: 30, peri: 22 };
+            const room = { w: 5, l: 5, area: 25, peri: 20 };
+            const kitchen = { w: 4, l: 4, area: 16, peri: 16 };
+            const bath = { w: 2.5, l: 2, area: 5, peri: 9 };
+            const corridor = { w: 6, l: 1.5, area: 9, peri: 15 };
+            const balcony = { w: 6, l: 1.5, area: 9, peri: 15 };
+
+            // Standard openings
+            const windowArea = 2.5 * 1.5; // 3.75 m² per window
+            const doorArea = 1.0 * 2.2;   // 2.2 m² per door
+            const totalWindowArea = numWindows * windowArea;
+            const totalDoorArea = (numDoors + 1) * doorArea; // Doors + Main Door
+
+            // Spaces Breakdown Configuration
+            const spaces = [
+                {
+                    name: 'الصالة الرئيسيّة (الاستقبال)',
+                    floorArea: living.area,
+                    wallGross: living.peri * height,
+                    ceilingArea: living.area,
+                    skirting: living.peri - 1.0
+                },
+                {
+                    name: `غرف النوم المعيارية (${numRooms} غرفة)`,
+                    floorArea: room.area * numRooms,
+                    wallGross: room.peri * height * numRooms,
+                    ceilingArea: room.area * numRooms,
+                    skirting: (room.peri - 1.0) * numRooms
+                },
+                {
+                    name: 'المطبخ',
+                    floorArea: kitchen.area,
+                    wallGross: kitchen.peri * height,
+                    ceilingArea: kitchen.area,
+                    skirting: 0 // Tiled walls
+                },
+                {
+                    name: `الحمامات (${numBaths} حمام)`,
+                    floorArea: bath.area * numBaths,
+                    wallGross: bath.peri * height * numBaths,
+                    ceilingArea: bath.area * numBaths,
+                    skirting: 0 // Tiled walls
+                },
+                {
+                    name: 'الممر الرئيسي والموزّع',
+                    floorArea: corridor.area,
+                    wallGross: corridor.peri * height,
+                    ceilingArea: corridor.area,
+                    skirting: corridor.peri - 2.0
+                },
+                {
+                    name: `الشرفات / البلكون (${numBalconies} بلكون)`,
+                    floorArea: balcony.area * numBalconies,
+                    wallGross: balcony.peri * height * numBalconies,
+                    ceilingArea: balcony.area * numBalconies,
+                    skirting: balcony.peri * numBalconies
+                }
+            ];
+
+            // Quantities Summing
+            let totalCalculatedFloorArea = 0;
+            let totalGrossWallArea = 0;
+            let totalCeilingArea = 0;
+            let totalSkirtingLM = 0;
+
+            let qTableHTML = '';
+            spaces.forEach(s => {
+                totalCalculatedFloorArea += s.floorArea;
+                totalGrossWallArea += s.wallGross;
+                totalCeilingArea += s.ceilingArea;
+                totalSkirtingLM += s.skirting;
+
+                qTableHTML += `
+                    <tr>
+                        <td class="p-3 font-semibold text-slate-800">${s.name}</td>
+                        <td class="p-3">${s.floorArea.toFixed(1)} م²</td>
+                        <td class="p-3">${s.wallGross.toFixed(1)} م²</td>
+                        <td class="p-3">${s.ceilingArea.toFixed(1)} م²</td>
+                        <td class="p-3">${s.skirting.toFixed(1)} م.ط</td>
+                    </tr>
+                `;
+            });
+
+            // Wall deductions
+            const totalNetWallArea = Math.max(0, totalGrossWallArea - totalWindowArea - totalDoorArea);
+
+            // Render Spatial Quantities Table
+            document.getElementById('quantitiesTableBody').innerHTML = qTableHTML + `
+                <tr class="bg-slate-100 font-bold border-t border-slate-300 text-slate-900">
+                    <td class="p-3">المجموع التفصيلي المحسوب</td>
+                    <td class="p-3 text-blue-700">${totalCalculatedFloorArea.toFixed(1)} م²</td>
+                    <td class="p-3 text-blue-700">${totalNetWallArea.toFixed(1)} م² (صافي)</td>
+                    <td class="p-3 text-blue-700">${totalCeilingArea.toFixed(1)} م²</td>
+                    <td class="p-3 text-blue-700">${totalSkirtingLM.toFixed(1)} م.ط</td>
+                </tr>
+            `;
+
+            // FINANCIAL BOQ ITEMS CALCULATION (Sequential Items 1 to 16)
+            const wetAreasFloor = (bath.area * numBaths) + (balcony.area * numBalconies); 
+            const wallCeramicArea = (kitchen.peri * height) + (bath.peri * height * numBaths); 
+            const plasterWallsArea = Math.max(0, totalNetWallArea - wallCeramicArea); 
+            const paintWallsArea = plasterWallsArea;
+            const paintCeilingArea = totalAreaInput;
+            
+            // FALSE CEILING AREA: Exclusively for Bathrooms & Kitchens
+            const falseCeilingArea = (bath.area * numBaths) + kitchen.area;
+
+            const items = [
+                { id: '1', name: 'أعمال التوريق / اللياسة للجدران الداخلية (سماكة 15 مم)', qty: plasterWallsArea, unit: 'م²', rate: customRates['1'] ?? 8.0 },
+                { id: '2', name: 'أعمال لياسة / رش طينة الأسقف', qty: totalAreaInput, unit: 'م²', rate: customRates['2'] ?? 10.0 },
+                { id: '3', name: 'أعمال العزل المائي والحراري (للحمامات والمطابخ والبلكون)', qty: wetAreasFloor, unit: 'م²', rate: customRates['3'] ?? 10.0 },
+                { id: '4', name: 'أعمال الدهان والتأسيس للجدران الداخلية (معجون + بويات)', qty: paintWallsArea, unit: 'م²', rate: customRates['4'] ?? 8.0 },
+                { id: '5', name: 'أعمال دهان الأسقف (امولشن / دهان بويات)', qty: paintCeilingArea, unit: 'م²', rate: customRates['5'] ?? 8.0 },
+                { id: '6', name: 'أسقف مستعارة وديكورات (للمطابخ والحمامات فقط - بلاطات 60x60)', qty: falseCeilingArea, unit: 'م²', rate: customRates['6'] ?? 12.0 },
+                { id: '7', name: 'بلاط أرضيات (سيراميك / بورسلين) شامل المواد والتركيب', qty: totalAreaInput * 1.05, unit: 'م²', rate: customRates['7'] ?? 10.0 },
+                { id: '8', name: 'سيراميك جدران المطابخ والحمامات', qty: wallCeramicArea, unit: 'م²', rate: customRates['8'] ?? 10.0 },
+                { id: '9', name: 'تركيب نعاليات / Skirting للأرضيات', qty: totalSkirtingLM, unit: 'م.ط', rate: customRates['9'] ?? 4.0 },
+                { id: '10', name: 'عتبات ورخام المداخل والنوافذ (Thresholds)', qty: (numWindows * 1.5) + (numDoors * 1.0), unit: 'م.ط', rate: customRates['10'] ?? 10.0 },
+                { id: '11', name: 'أبواب خشبية داخلية وخارجية (أبواب الغرف + باب الشقة المصفح)', qty: numDoors + 1, unit: 'عدد', rate: customRates['11'] ?? 250.0 },
+                { id: '12', name: 'نوافذ ألمنيوم (دبل جلاس / مقطع خاص)', qty: totalWindowArea, unit: 'م²', rate: customRates['12'] ?? 150.0 },
+                { id: '13', name: 'أعمال التأسيس والتمديدات الكهربائية (MEP - Electrical)', qty: totalAreaInput, unit: 'م²', rate: customRates['13'] ?? 10.0 },
+                { id: '14', name: 'أعمال التمديدات والتأسيس الصحي (MEP - Plumbing)', qty: totalAreaInput, unit: 'م²', rate: customRates['14'] ?? 10.0 },
+                { id: '15', name: 'أطقم حمامات ومغاسل واكسسوارات صحية كاملة', qty: numBaths, unit: 'طقم', rate: customRates['15'] ?? 200.0 },
+                { id: '16', name: 'تجهيزات المطبخ والخزائن (Kitchen Set complete)', qty: 1, unit: 'مقطوعية', rate: customRates['16'] ?? 1080.0 }
+            ];
+
+            let subtotalUSD = 0;
+            let costTableHTML = '';
+
+            items.forEach(item => {
+                const itemTotal = item.qty * item.rate;
+                subtotalUSD += itemTotal;
+                const isModified = customRates[item.id] !== defaultRates[item.id];
+                costTableHTML += `
+                    <tr class="hover:bg-slate-50 transition ${isModified ? 'bg-amber-50/50' : ''}">
+                        <td class="p-3 font-semibold text-slate-500">${item.id}</td>
+                        <td class="p-3 font-medium text-slate-800">${item.name}</td>
+                        <td class="p-3 font-bold text-slate-700">${item.qty.toFixed(1)}</td>
+                        <td class="p-3 text-slate-500">${item.unit}</td>
+                        <td class="p-3">
+                            <div class="flex items-center gap-1 min-w-[110px]">
+                                <span class="text-slate-400 font-bold">$</span>
+                                <input type="number" step="0.5" min="0" value="${item.rate}" 
+                                       oninput="updateRate('${item.id}', this.value)" 
+                                       class="w-24 p-1 text-xs font-bold text-slate-900 bg-white border ${isModified ? 'border-amber-500 bg-amber-50 text-amber-900 ring-1 ring-amber-400' : 'border-slate-300'} rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none transition shadow-sm">
+                            </div>
+                        </td>
+                        <td class="p-3 font-bold text-slate-900">$${itemTotal.toFixed(1)}</td>
+                    </tr>
+                `;
+            });
+
+            const contingencyUSD = subtotalUSD * contingencyRate;
+            const grandTotalUSD = subtotalUSD + contingencyUSD;
+            const costPerM2 = grandTotalUSD / totalAreaInput;
+            const grandTotalSYP = grandTotalUSD * exchangeRate;
+
+            document.getElementById('costTableBody').innerHTML = costTableHTML + `
+                <tr class="bg-slate-100 font-bold border-t border-slate-300 text-slate-800">
+                    <td colspan="5" class="p-3">المجموع الفرعي لكافة البنود (Subtotal)</td>
+                    <td class="p-3 text-slate-900">$${subtotalUSD.toFixed(1)}</td>
+                </tr>
+                <tr class="bg-amber-50 text-amber-900 font-bold">
+                    <td colspan="5" class="p-3">احتياطي طوارئ وتغير أسعار (Contingency ${(contingencyRate * 100)}%)</td>
+                    <td class="p-3 text-amber-700">$${contingencyUSD.toFixed(1)}</td>
+                </tr>
+                <tr class="bg-slate-900 text-white font-extrabold text-sm">
+                    <td colspan="5" class="p-3">التكلفة الإجمالية النهائية لتقدير التشطيب</td>
+                    <td class="p-3 text-emerald-400 text-base">$${grandTotalUSD.toFixed(1)}</td>
+                </tr>
+            `;
+
+            // Update KPI cards
+            document.getElementById('grandTotalUSD').innerText = `$${grandTotalUSD.toLocaleString('en-US', {maximumFractionDigits: 0})}`;
+            document.getElementById('grandTotalSYP').innerText = `${grandTotalSYP.toLocaleString('ar-SY', {maximumFractionDigits: 0})} ليرة سورية تقريباً`;
+            document.getElementById('costPerM2USD').innerText = `$${costPerM2.toFixed(1)} / م²`;
+            document.getElementById('contingencyUSD').innerText = `$${contingencyUSD.toLocaleString('en-US', {maximumFractionDigits: 0})}`;
+            document.getElementById('contingencyPercentText').innerText = `نسبة طوارئ مضافة ${(contingencyRate * 100)}%`;
+        }
+
+        // Run calculation on load
+        window.onload = function() {
+            calculateAll();
+        };
+    </script>
+</body>
+</html>
